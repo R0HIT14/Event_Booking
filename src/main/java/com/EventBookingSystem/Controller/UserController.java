@@ -40,11 +40,6 @@ public class UserController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable long id){
-        return ResponseEntity.ok(UserMapper.toDto(userService.getUserById(id)));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable long id, @Valid @RequestBody UserRequestDto userRequestDto){
         return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(id, UserMapper.toEntity(userRequestDto))));
@@ -67,5 +62,10 @@ public class UserController {
         Page<UserResponseDto> responsePage = userPage.map(UserMapper::toDto);
 
         return ResponseEntity.ok(responsePage);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable long id){
+        return ResponseEntity.ok(UserMapper.toDto(userService.getUserById(id)));
     }
 }
