@@ -1,11 +1,14 @@
 package com.EventBookingSystem.Service.Implementation;
 
 import com.EventBookingSystem.Entity.User;
+import com.EventBookingSystem.Exception.EmailAlreadyExistsException;
+import com.EventBookingSystem.Exception.ResourceNotFoundException;
 import com.EventBookingSystem.Repository.UserRepository;
 import com.EventBookingSystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +17,20 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists: " + user.getEmail());
+            throw new EmailAlreadyExistsException("Email already exists: " + user.getEmail());
         }
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -46,13 +52,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
     }
 
     @Override
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found with ID: " + id);
+            throw new ResourceNotFoundException("User not found with ID: " + id);
         }
         userRepository.deleteById(id);
     }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +26,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto){
         User user = userService.createUser(UserMapper.toEntity(userRequestDto));
-        return ResponseEntity.ok(UserMapper.toDto(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(user));
+
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUser(){
+    public ResponseEntity<List<UserResponseDto>> getAllUsers(){
 //        List<UserResponseDto> list = userService.getAllUsers().stream()
 //                .map(user -> UserMapper.toDto(user)).collect(Collectors.toList());
 
@@ -37,18 +39,21 @@ public class UserController {
                 .stream()
                 .map(UserMapper::toDto)
                 .toList();
+        if(list.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(list);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable long id, @Valid @RequestBody UserRequestDto userRequestDto){
-        return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(id, UserMapper.toEntity(userRequestDto))));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(userService.updateUser(id, UserMapper.toEntity(userRequestDto))));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable long id){
         userService.deleteUser(id);
-        return ResponseEntity.ok("User with id : " +id+" successfully deleted");
+        return ResponseEntity.ok("User deleted successfully with ID: " + id);
     }
 
     @GetMapping("/paginated")
