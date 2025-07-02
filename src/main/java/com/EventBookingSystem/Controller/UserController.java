@@ -1,7 +1,7 @@
 package com.EventBookingSystem.Controller;
 
-import com.EventBookingSystem.Dto.UserRequestDto;
-import com.EventBookingSystem.Dto.UserResponseDto;
+import com.EventBookingSystem.Dto.Requests.UserRequestDto;
+import com.EventBookingSystem.Dto.Response.UserResponseDto;
 import com.EventBookingSystem.Entity.User;
 import com.EventBookingSystem.Mapper.UserMapper;
 import com.EventBookingSystem.Service.UserService;
