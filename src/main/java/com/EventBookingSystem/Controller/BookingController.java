@@ -56,8 +56,6 @@ public class BookingController {
         return ResponseEntity.ok("Booking cancelled with ID: " + id);
     }
 
-    // 🔽 Additional Methods
-
     @Operation(summary = "Get bookings by user", description = "Fetches all bookings for a specific user")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<BookingResponseDto>> getBookingsByUser(@PathVariable Long userId) {
