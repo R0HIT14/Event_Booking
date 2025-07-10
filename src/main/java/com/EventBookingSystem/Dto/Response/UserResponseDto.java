@@ -1,4 +1,4 @@
-package com.EventBookingSystem.Dto;
+package com.EventBookingSystem.Dto.Response;
 
 import com.EventBookingSystem.Enums.Role;
 import lombok.Data;

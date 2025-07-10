@@ -1,8 +1,6 @@
-package com.EventBookingSystem.Dto;
+package com.EventBookingSystem.Dto.Requests;
 
 import com.EventBookingSystem.Enums.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
